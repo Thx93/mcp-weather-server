@@ -1,0 +1,35 @@
+{
+  "name": "@thx93/mcp-weather-server",
+  "version": "1.0.0",
+  "mcpName": "io.github.Thx93/weather",
+  "main": "index.js",
+  "type": "module",
+  "bin": {
+    "weather": "./build/index.js"
+  },
+  "scripts": {
+    "build": "tsc && node -e \"require('fs').chmodSync('build/index.js', '755')\""
+  },
+  "files": [
+    "build"
+  ],
+  "keywords": [],
+  "author": "Thx93",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Thx93/mcp-weather-server.git"
+  },
+  "description": "An MCP server for weather information.",
+  "devDependencies": {
+    "@types/node": "^24.13.4",
+    "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server": "^2.0.0",
+    "zod": "^4.6.1"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  }
+}
