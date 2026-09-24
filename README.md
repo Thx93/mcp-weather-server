@@ -1,5 +1,6 @@
 # A Simple MCP Weather Server written in TypeScript
 
+[![CI](https://github.com/Thx93/mcp-weather-server/actions/workflows/ci.yml/badge.svg)](https://github.com/Thx93/mcp-weather-server/actions/workflows/ci.yml)
 [![M8ven Score](https://m8ven.ai/badge/mcp/thx93/mcp-weather-server)](https://m8ven.ai/mcp/thx93/mcp-weather-server)
 
 A minimal [Model Context Protocol](https://modelcontextprotocol.io) server that
@@ -18,6 +19,25 @@ no account to run.
 Both tools are annotated `readOnlyHint: true` and `destructiveHint: false`, so a
 host that respects tool annotations can invoke them without asking first. Both
 reach out to `api.weather.gov` and are marked `openWorldHint: true` for that reason.
+
+## Use it hosted, paid per call
+
+Running it yourself costs nothing. There is also a **hosted version, paid per call
+in USDC on Base over x402**, for agents that would rather not carry a Node process
+and a data layer:
+
+```
+https://agent-evidence-api.thx93.workers.dev/weather/mcp
+```
+
+It serves the same two tools, with the same output schemas and the same `null`
+fallbacks, plus a free `health` tool and free `tools/list` so the service can be
+discovered and probed before paying. Discovery is free; a `tools/call` for
+`get-alerts` or `get-forecast` returns 402 with the price. Both are declared
+read-only, so a host that respects annotations will not ask twice.
+
+The `server.json` in this repository advertises that remote, so an MCP client can
+install it by registry name rather than by cloning anything.
 
 ## Prerequisites
 

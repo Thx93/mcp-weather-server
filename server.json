@@ -1,20 +1,17 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.Thx93/weather",
-  "description": "An MCP server for weather information.",
+  "title": "Weather",
+  "description": "US weather over MCP. get-alerts returns every active National Weather Service alert for a two-letter state code - the event, the area it covers, its severity and the official instruction. get-forecast returns the next five forecast periods for a latitude and longitude. Two read-only tools, US locations only. Hosted and paid per call in USDC on Base over x402; discovery (tools/list) and a health tool are free.",
   "repository": {
     "url": "https://github.com/Thx93/mcp-weather-server",
     "source": "github"
   },
   "version": "1.0.0",
-  "packages": [
+  "remotes": [
     {
-      "registryType": "npm",
-      "identifier": "@thx93/mcp-weather-server",
-      "version": "1.0.0",
-      "transport": {
-        "type": "stdio"
-      }
+      "type": "streamable-http",
+      "url": "https://agent-evidence-api.thx93.workers.dev/weather/mcp"
     }
   ]
 }
