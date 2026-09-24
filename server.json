@@ -2,7 +2,7 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.Thx93/weather",
   "title": "Weather",
-  "description": "US weather over MCP. get-alerts returns every active National Weather Service alert for a two-letter state code - the event, the area it covers, its severity and the official instruction. get-forecast returns the next five forecast periods for a latitude and longitude. Two read-only tools, US locations only. Hosted and paid per call in USDC on Base over x402; discovery (tools/list) and a health tool are free.",
+  "description": "US weather for AI agents: active NWS alerts by state, 5-period forecasts by lat/lon. Paid per call.",
   "repository": {
     "url": "https://github.com/Thx93/mcp-weather-server",
     "source": "github"
