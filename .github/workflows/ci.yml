@@ -1,0 +1,44 @@
+# Build and test on every push and pull request.
+#
+# `npm test` builds first and then runs the suite against the compiled output,
+# so one step covers both — a change that does not compile cannot pass here.
+# Nothing touches the network: the NWS API is stubbed and the suite drives the
+# server in-process over InMemoryTransport.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: typecheck + tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm test
+
+      # A published package must contain a build that starts. `--help` would exit
+      # 0 without proving the module loads; printing the tool list from the built
+      # entrypoint proves both that it compiles and that it exports a server.
+      - name: The built entrypoint loads
+        run: node --input-type=module -e 'const { buildServer } = await import("./build/server.js"); const s = buildServer(); if (!s) throw new Error("buildServer returned nothing"); console.log("build/server.js exports buildServer: ok");'
