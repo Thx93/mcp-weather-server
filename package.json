@@ -2,18 +2,30 @@
   "name": "@thx93/mcp-weather-server",
   "version": "1.0.0",
   "mcpName": "io.github.Thx93/weather",
-  "main": "index.js",
+  "main": "build/server.js",
   "type": "module",
   "bin": {
     "weather": "./build/index.js"
   },
   "scripts": {
-    "build": "tsc && node -e \"require('fs').chmodSync('build/index.js', '755')\""
+    "build": "tsc && node -e \"require('fs').chmodSync('build/index.js', '755')\"",
+    "typecheck": "tsc --noEmit",
+    "test": "npm run build && node --test \"tests/**/*.test.mjs\""
   },
   "files": [
     "build"
   ],
-  "keywords": [],
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "model-context-protocol",
+    "weather",
+    "nws",
+    "national-weather-service",
+    "forecast",
+    "ai-agents",
+    "typescript"
+  ],
   "author": "Thx93",
   "license": "ISC",
   "repository": {
