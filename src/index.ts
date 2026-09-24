@@ -137,6 +137,16 @@ function buildServer(): McpServer {
           .describe("Two-letter state code (e.g. CA, NY)"),
       }),
       outputSchema: alertsOutputSchema,
+      // Both tools only read the public NWS API: no side effects, safe to retry,
+      // and they reach an open external system. Hosts use these hints to decide
+      // whether to ask the user before invoking, so a read-only tool that omits
+      // them gets treated as potentially destructive.
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: true,
+      },
     },
     async ({ state }) => {
       const stateCode = state.toUpperCase();
@@ -186,6 +196,13 @@ function buildServer(): McpServer {
           .describe("Longitude of the location"),
       }),
       outputSchema: forecastOutputSchema,
+      // Read-only, like get-alerts.
+      annotations: {
+        readOnlyHint: true,
+        destructiveHint: false,
+        idempotentHint: true,
+        openWorldHint: true,
+      },
     },
     async ({ latitude, longitude }) => {
       // Get grid point data

@@ -1,5 +1,7 @@
 # A Simple MCP Weather Server written in TypeScript
 
+[![M8ven Score](https://m8ven.ai/badge/mcp/thx93/mcp-weather-server)](https://m8ven.ai/mcp/thx93/mcp-weather-server)
+
 A minimal MCP server that exposes US weather data from the [National Weather Service API](https://www.weather.gov/documentation/services-web-api) as two tools:
 
 - `get-forecast` – get the forecast for a location (takes `latitude` and `longitude`)
