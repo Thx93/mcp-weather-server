@@ -1,6 +1,6 @@
 {
   "name": "@thx93/mcp-weather-server",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "mcpName": "io.github.Thx93/weather",
   "main": "build/server.js",
   "type": "module",

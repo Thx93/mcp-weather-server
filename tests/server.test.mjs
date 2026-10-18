@@ -85,15 +85,15 @@ const callTool = (request, name, args) =>
 const listTools = (request) => request("tools/list", {});
 
 /**
- * `get-alerts` declares a top-level ARRAY output schema, which the SDK projects
- * onto `{ result: [...] }` on the wire for clients on older protocol revisions.
- * Unwrap whichever shape came back so these assertions are about the data rather
- * than about that compatibility shim.
+ * The alert records from a `get-alerts` result.
+ *
+ * They now live under `alerts`. They used to be a top-level array, which the SDK
+ * projected to `{ result: [...] }` for older protocol revisions - and which a
+ * client on the widely-deployed SDK rejects outright, failing the whole
+ * `tools/list` response. Reading them from one known place is part of not having
+ * that class of bug again.
  */
-const alertRecords = (result) => {
-  const structured = result.structuredContent;
-  return Array.isArray(structured) ? structured : structured.result;
-};
+const alertRecords = (result) => result.structuredContent?.alerts ?? [];
 
 
 // ---------------------------------------------------------------------------

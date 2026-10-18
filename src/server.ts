@@ -85,19 +85,30 @@ export interface ForecastResponse {
 }
 
 /**
- * The output schema of `get-alerts`: a top-level array, not an object, which
- * revision 2026-07-28 is the first to allow. The SDK projects it down to the
- * old `{ result: [...] }` wrapper for 2025-11-25 clients.
+ * The output schema of `get-alerts`: alert records under an `alerts` key.
+ *
+ * The array used to be top-level, which revision 2026-07-28 permits and which the
+ * SDK projects to `{ result: [...] }` for 2025-11-25 clients. But a client built on
+ * the widely-deployed SDK rejects the ENTIRE `tools/list` response when it meets a
+ * top-level array - `invalid_value: expected "object"` - so such a client cannot
+ * connect to the server at all, let alone call it.
+ *
+ * This was not theoretical: the hosted deployment of these same tools carried the
+ * array form and was unreachable from a standard client until it was wrapped. The
+ * installable artifact is fixed to match, because a server nobody can enumerate is
+ * worse than one that is merely unknown.
  */
-export const alertsOutputSchema = z.array(
-  z.object({
-    event: z.string().describe("The kind of weather event"),
-    area: z.string().describe("The area the alert covers"),
-    severity: z.string().describe("How severe the event is"),
-    description: z.string().describe("What is happening"),
-    instructions: z.string().describe("What people in the area should do"),
-  }),
-);
+export const alertsOutputSchema = z.object({
+  alerts: z.array(
+    z.object({
+      event: z.string().describe("The kind of weather event"),
+      area: z.string().describe("The area the alert covers"),
+      severity: z.string().describe("How severe the event is"),
+      description: z.string().describe("What is happening"),
+      instructions: z.string().describe("What people in the area should do"),
+    }),
+  ),
+});
 
 /** The output schema of `get-forecast`: the object case. */
 export const forecastOutputSchema = z.object({
@@ -117,7 +128,7 @@ export const forecastOutputSchema = z.object({
     .describe("The forecast periods, soonest first"),
 });
 
-export type Alert = z.infer<typeof alertsOutputSchema>[number];
+export type Alert = z.infer<typeof alertsOutputSchema>["alerts"][number];
 export type Forecast = z.infer<typeof forecastOutputSchema>;
 
 // Format alert data for the model to read
@@ -221,7 +232,7 @@ export function buildServer(): McpServer {
             ? `No active alerts for ${stateCode}`
             : `Active alerts for ${stateCode}:\n\n${alerts.map(formatAlert).join("\n")}`;
 
-        return { content: [{ type: "text", text }], structuredContent: alerts };
+        return { content: [{ type: "text", text }], structuredContent: { alerts } };
       } catch (error) {
         return toolError(
           `Failed to retrieve alerts: ${error instanceof Error ? error.message : String(error)}`,
