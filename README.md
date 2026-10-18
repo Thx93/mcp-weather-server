@@ -88,6 +88,18 @@ Or with `npx`, once the package is published:
 }
 ```
 
+## Verified against the source
+
+The tools return the National Weather Service's own data, so correctness is
+checkable rather than asserted. On 2026-10-19, `api.weather.gov` reported one active
+alert for TX and a paid call to the hosted `get-alerts` returned exactly one -
+`Event: Flood Advisory` - for the same state.
+
+That matters more than it sounds: the sibling evidence service carries a documented
+reliability gap in its *verdict* (see its `docs/evidence-quality.md`), while these
+tools have no inferred judgement to get wrong. They fetch and reshape; the values are
+the NWS's.
+
 ## Behaviour worth knowing
 
 **Failures are tool results, not protocol errors.** A request the NWS cannot answer —
