@@ -1,0 +1,56 @@
+version: 2.1
+
+# CircleCI is the CI for this repository.
+#
+# Why this exists alongside the GitHub Actions workflow: `.circleci/config.yml` is
+# an ordinary file and can be pushed with a normal token, while anything under
+# `.github/workflows/` needs the `workflow` token scope. The first version of the
+# Actions file could not be pushed over git at all and had to go through the
+# GitHub Contents API.
+#
+# The steps mirror the Actions workflow. One thing to be careful about in this
+# particular file: the entrypoint check below contains a colon followed by a
+# space, and that is illegal inside a plain YAML scalar. An earlier version wrote
+# it inline on the `run:` line as `buildServer: ok`, GitHub rejected the entire
+# workflow file, and the result was a run with ZERO jobs — which reads like an
+# infrastructure failure rather than a typo. Here it is a block scalar (`command: |`),
+# which accepts anything.
+
+jobs:
+  test:
+    docker:
+      - image: cimg/node:24.21
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - npm-cache-v1-{{ checksum "package-lock.json" }}
+            - npm-cache-v1-
+      - run:
+          name: Install dependencies
+          command: npm ci
+      - save_cache:
+          key: npm-cache-v1-{{ checksum "package-lock.json" }}
+          paths:
+            - ~/.npm
+      - run:
+          name: Typecheck
+          command: npm run typecheck
+      # `npm test` builds first and then runs the suite against the compiled
+      # output, so one step covers both: a change that does not compile cannot
+      # pass here.
+      - run:
+          name: Test
+          command: npm test
+      # A published package must contain a build that starts. `--help` would exit 0
+      # without proving the module loads; importing the built entrypoint proves
+      # both that it compiles and that it exports a server.
+      - run:
+          name: The built entrypoint loads
+          command: |
+            node --input-type=module -e 'const { buildServer } = await import("./build/server.js"); const s = buildServer(); if (!s) throw new Error("buildServer returned nothing"); console.log("built entrypoint exports buildServer");'
+
+workflows:
+  ci:
+    jobs:
+      - test
