@@ -78,7 +78,7 @@ Most MCP hosts use the same three-line shape:
 }
 ```
 
-Or with `npx`, once the package is published:
+Or, once the package is published to npm:
 
 ```json
 {
@@ -87,6 +87,17 @@ Or with `npx`, once the package is published:
   }
 }
 ```
+
+Or straight from the repository, with no registry account needed:
+
+```bash
+npm install github:Thx93/mcp-weather-server
+```
+
+That path works because `prepare` builds the server during the install; `build/` is
+not committed, so without it the bin would point at a file that does not exist. It
+was verified end to end — install from GitHub, then speak MCP to the result, and both
+tools list with object output schemas.
 
 ## Verified against the source
 
