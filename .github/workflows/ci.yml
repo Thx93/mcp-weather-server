@@ -38,7 +38,15 @@ jobs:
         run: npm test
 
       # A published package must contain a build that starts. `--help` would exit
-      # 0 without proving the module loads; printing the tool list from the built
-      # entrypoint proves both that it compiles and that it exports a server.
+      # 0 without proving the module loads; importing the built entrypoint proves
+      # both that it compiles and that it exports a server.
+      #
+      # Written as a block scalar on purpose. This text contains a colon followed
+      # by a space ("buildServer: ok" in the first version), and that is illegal
+      # inside a plain YAML scalar. GitHub rejected the entire workflow file, so
+      # the run never started and showed ZERO jobs - which is why it looked like a
+      # mysterious infra failure rather than a typo. Never inline a ": " in a
+      # `run:` line.
       - name: The built entrypoint loads
-        run: node --input-type=module -e 'const { buildServer } = await import("./build/server.js"); const s = buildServer(); if (!s) throw new Error("buildServer returned nothing"); console.log("build/server.js exports buildServer: ok");'
+        run: |
+          node --input-type=module -e 'const { buildServer } = await import("./build/server.js"); const s = buildServer(); if (!s) throw new Error("buildServer returned nothing"); console.log("built entrypoint exports buildServer");'
