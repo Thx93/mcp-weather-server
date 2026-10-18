@@ -109,13 +109,16 @@ weather like", short enough for a context window.
 
 ## Structured content
 
-Both tools declare an `outputSchema` and return `structuredContent`. `get-forecast`
-returns an object; `get-alerts` returns a top-level JSON array, which protocol
-revision `2026-07-28` is the first to allow — see
-[Structured Content](https://modelcontextprotocol.io/specification/2026-07-28/server/tools#structured-content).
-`serveStdio` serves both protocol eras from one factory, and the SDK projects the
-array-rooted schema down to the `{"result": [...]}` form for a `2025-11-25` client,
-so adopting it costs older clients nothing. The tests assert the data either way.
+Both tools declare an `outputSchema` and return `structuredContent`, and both
+schemas are **objects**: `get-forecast` returns `{ latitude, longitude, periods }`,
+`get-alerts` returns `{ alerts: [...] }`.
+
+`get-alerts` previously declared a top-level array, which protocol revision
+`2026-07-28` does permit. It was changed because a client on the widely-deployed MCP
+SDK rejects the entire `tools/list` response when it meets an array schema —
+`invalid_value: expected "object"` — so such a client cannot connect to the server
+at all. Wrapping the array in an object is what makes these tools reachable from
+ordinary clients; the textual summary a model reads is unchanged.
 
 ## Provenance
 
