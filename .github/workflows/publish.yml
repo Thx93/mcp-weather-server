@@ -1,0 +1,55 @@
+# Publish to npm via Trusted Publishing (OIDC, no long-lived token).
+#
+# Why this exists: the account has 2FA enabled and the personal access tokens I was
+# given cannot bypass it, so `npm publish` fails with
+#   "Two-factor authentication or granular access token with bypass 2fa enabled is
+#    required to publish packages."
+#
+# Trusted publishing removes the token from the picture entirely. GitHub Actions
+# mints a short-lived OIDC token proving this specific workflow in this specific
+# repository is running, npm verifies it against the trusted-publisher relationship
+# configured for the package, and the publish is authorised - with a provenance
+# attestation attached, which a token publish would also have had to earn.
+#
+# The trusted publisher must name THIS filename, exactly: publish.yml.
+#
+# Requires npm CLI >= 11.5.1 and Node >= 22.14.0; the runner's npm is newer than
+# both.
+name: Publish to npm
+
+on:
+  # Manual, so a publish is a deliberate act rather than a side effect of a push.
+  workflow_dispatch:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+  # The whole mechanism: lets the job request the OIDC token npm exchanges.
+  id-token: write
+
+jobs:
+  publish:
+    name: publish @thx93/mcp-weather-server
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Never publish something the suite has not just passed.
+      - name: Test
+        run: npm test
+
+      - name: Publish
+        run: |
+          echo "npm $(npm --version), node $(node --version)"
+          npm publish --provenance --access public
