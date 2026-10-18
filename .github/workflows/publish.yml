@@ -13,6 +13,16 @@
 #
 # The trusted publisher must name THIS filename, exactly: publish.yml.
 #
+# One setting is easy to miss and silently fatal: configurations created after
+# 2026-09-03 default to allowing only `npm stage publish`, which stages a release
+# for a maintainer to approve. This workflow calls `npm publish`, so the
+# configuration must have **Allow npm publish** ticked as well. Without it the
+# publish is refused and the only remedy is staged publishing, whose approval step
+# requires interactive 2FA and cannot be automated.
+#
+# A configuration that is never used expires after 2 days, so the first publish has
+# to happen reasonably soon after it is created.
+#
 # Requires npm CLI >= 11.5.1 and Node >= 22.14.0; the runner's npm is newer than
 # both.
 name: Publish to npm
