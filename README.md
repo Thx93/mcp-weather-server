@@ -78,7 +78,13 @@ Most MCP hosts use the same three-line shape:
 }
 ```
 
-Or, once the package is published to npm:
+Or straight from npm — published 2026-10-19:
+
+```bash
+npx -y @thx93/mcp-weather-server
+```
+
+Or, equivalently, as a client config entry:
 
 ```json
 {
