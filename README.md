@@ -1,4 +1,4 @@
-# A Simple MCP Weather Server written in TypeScript
+# MCP Weather Server — US alerts and forecasts for AI agents
 
 [![CI](https://github.com/Thx93/mcp-weather-server/actions/workflows/ci.yml/badge.svg)](https://github.com/Thx93/mcp-weather-server/actions/workflows/ci.yml)
 [![M8ven Score](https://m8ven.ai/badge/mcp/thx93/mcp-weather-server)](https://m8ven.ai/mcp/thx93/mcp-weather-server)
@@ -148,6 +148,49 @@ SDK rejects the entire `tools/list` response when it meets an array schema —
 `invalid_value: expected "object"` — so such a client cannot connect to the server
 at all. Wrapping the array in an object is what makes these tools reachable from
 ordinary clients; the textual summary a model reads is unchanged.
+
+## FAQ
+
+**What is this?**
+An MCP (Model Context Protocol) server that exposes US weather data from the National
+Weather Service as two read-only tools, `get-alerts` and `get-forecast`. It runs over
+stdio when you install it, and the same code is served over streamable HTTP at
+`https://agent-evidence-api.thx93.workers.dev/weather/mcp` where it is paid per call.
+
+**Do I need an API key?**
+No. The National Weather Service API needs no key, and neither the local server nor the
+hosted endpoint asks for one, for an account, or for a signup.
+
+**How much does it cost?**
+Running it yourself is free — it is ISC-licensed and published as
+`@thx93/mcp-weather-server` on npm. The hosted endpoint charges 0.003 USDC per call on
+Base through x402, which is how an agent with a wallet but no ability to sign up for
+anything can still call it.
+
+**Which locations are supported?**
+US only. The data is the National Weather Service's, which covers the United States and
+its territories. A coordinate outside that coverage returns an error rather than a
+guess.
+
+**What do the tools return?**
+`get-alerts` takes a two-letter state code and returns every active alert: event, area,
+severity, description and the official instruction. `get-forecast` takes a latitude and
+longitude and returns five forecast periods: name, temperature, wind speed and
+direction, and the plain-language forecast. Both declare an object output schema.
+
+**How do I add it to Claude Desktop, Cursor or another MCP client?**
+
+```json
+{
+  "mcpServers": {
+    "weather": { "command": "npx", "args": ["-y", "@thx93/mcp-weather-server"] }
+  }
+}
+```
+
+**Why does it exist?**
+It began as the MCP "Build a server" tutorial and was extended: typed output schemas,
+read-only annotations, a bounded fetch, an explicit failure contract and a test suite.
 
 ## Provenance
 

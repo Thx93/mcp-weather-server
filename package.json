@@ -1,6 +1,6 @@
 {
   "name": "@thx93/mcp-weather-server",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "mcpName": "io.github.Thx93/weather",
   "main": "build/server.js",
   "type": "module",
@@ -17,15 +17,18 @@
     "build"
   ],
   "keywords": [
+    "ai-agents",
+    "forecast",
     "mcp",
     "mcp-server",
+    "mcp-tools",
     "model-context-protocol",
-    "weather",
-    "nws",
     "national-weather-service",
-    "forecast",
-    "ai-agents",
-    "typescript"
+    "no-api-key",
+    "nws",
+    "typescript",
+    "weather",
+    "weather-api"
   ],
   "author": "Thx93",
   "license": "ISC",
@@ -44,5 +47,6 @@
   },
   "engines": {
     "node": ">=24.0.0"
-  }
+  },
+  "homepage": "https://github.com/Thx93/mcp-weather-server"
 }
