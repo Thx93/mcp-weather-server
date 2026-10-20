@@ -164,7 +164,7 @@ hosted endpoint asks for one, for an account, or for a signup.
 
 **How much does it cost?**
 Running it yourself is free — it is ISC-licensed and published as
-`@thx93/mcp-weather-server` on npm. The hosted endpoint charges 0.003 USDC per call on
+`@thx93/mcp-weather-server` on npm. The hosted endpoint charges 0.01 USDC per call on
 Base through x402, which is how an agent with a wallet but no ability to sign up for
 anything can still call it.
 
