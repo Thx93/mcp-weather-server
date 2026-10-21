@@ -28,7 +28,7 @@ in USDC on Base over x402**, for agents that would rather not carry a Node proce
 and a data layer:
 
 ```
-https://agent-evidence-api.thx93.workers.dev/weather/mcp
+https://agent-evidence.thx93.dev/weather/mcp
 ```
 
 It serves the same two tools, with the same output schemas and the same `null`
@@ -156,7 +156,7 @@ ordinary clients; the textual summary a model reads is unchanged.
 An MCP (Model Context Protocol) server that exposes US weather data from the National
 Weather Service as two read-only tools, `get-alerts` and `get-forecast`. It runs over
 stdio when you install it, and the same code is served over streamable HTTP at
-`https://agent-evidence-api.thx93.workers.dev/weather/mcp` where it is paid per call.
+`https://agent-evidence.thx93.dev/weather/mcp` where it is paid per call.
 
 **Do I need an API key?**
 No. The National Weather Service API needs no key, and neither the local server nor the
