@@ -3,6 +3,7 @@
 [![CI](https://github.com/Thx93/mcp-weather-server/actions/workflows/ci.yml/badge.svg)](https://github.com/Thx93/mcp-weather-server/actions/workflows/ci.yml)
 [![M8ven Score](https://m8ven.ai/badge/mcp/thx93/mcp-weather-server)](https://m8ven.ai/mcp/thx93/mcp-weather-server)
 [![Listed on mcpservers.org](https://mcpservers.org/badge.svg)](https://mcpservers.org/servers/thx93/mcp-weather-server)
+[![MCPRush](https://mcprush.com/badge/thx93-weather-mcp/compact.svg)](https://mcprush.com/to/thx93-weather-mcp?ref=badge)
 
 A minimal [Model Context Protocol](https://modelcontextprotocol.io) server that
 exposes US weather data from the
